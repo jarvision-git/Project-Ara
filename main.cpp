@@ -21,7 +21,7 @@ struct Bitboards {
 void pawn_development(Bitboards &board,int file ,int rank, int moves) 
 {
   uint64_t allbits=board.black_king | board.black_queen | board.black_rooks | board.black_bishops | board.black_knights | board.black_pawns|board.white_king | board.white_queen | board.white_rooks | board.white_bishops | board.white_knights | board.white_pawns;
-  uint64_t pawn = 0x8000000000000000 >> (((8 - rank)) * 8 + (8 - file));
+  uint64_t pawn = 0x8000000000000000 >> (((8 - rank)) * 8 + (file-1));
   if ((pawn & board.white_pawns) != 0) 
   {
     pawn = pawn<<8;
@@ -44,8 +44,8 @@ void pawn_development(Bitboards &board,int file ,int rank, int moves)
       cout<<"square occupied";
       return;
     }
-    uint64_t erase =  0x8000000000000000 >> (((8 - rank)) * 8 + ( 8 - file));
-    board.white_pawns = board.white_pawns ^ erase ^ pawn;
+    uint64_t erase =  0x8000000000000000 >> (((8 - rank)) * 8 + ( file - 1));
+    board.white_pawns = (board.white_pawns ^ erase) ^ pawn;
   }
   else if ((pawn & board.black_pawns) != 0)
   {
@@ -79,13 +79,13 @@ void pawn_development(Bitboards &board,int file ,int rank, int moves)
   }
 }
 
+
 void print_board(const Bitboards &board) {
   cout << "  a b c d e f g h" << endl; // File labels
   for (int rank = 7; rank >= 0; --rank) {
     cout << (rank + 1) << " "; // Rank labels
-    for (int file = 0; file < 8; ++file) {
-      uint64_t square = 1ULL << (rank * 8 + file);
-
+    for (int file = 1; file <= 8; ++file) {
+      uint64_t square = 0x8000000000000000 >> ((7-rank) * 8 + (file-1));
       if (board.white_pawns & square)
         cout << "P ";
       else if (board.white_rooks & square)
@@ -135,5 +135,11 @@ int main() {
       0x1000000000000000, // black king
   };                      // initializing initial chess board
     print_board(board);
+    pawn_development(board,1,2,2);
+    
+    print_board(board);
+     pawn_development(board,1,4,1);
+     print_board(board);
+    // pawn_capture(board,1,2,2);
     
 }
