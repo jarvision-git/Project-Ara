@@ -487,6 +487,29 @@ void pawn_development(Bitboards &board,int file,int rank, int steps)
 	}
 }
 
+int knights (board,int file,int rank,int dest_file,int dest_rank)
+{
+    if(file>=1 && file<=8 && rank>=1 && rank<=8 && dest_file>=1 && dest_file<=8 && dest_rank>=1 && dest_rank<=8)
+    {
+        return -1;
+    }
+    vector<pair<int,int>> moves = {{1,2},{2,1},{-1,2},{-1,-2},{1,-2},{2,-1},{-2,1},{-2,-1}};
+    bool valid=false;
+    for(auto itr:moves)
+    {
+        int t_file, t_rank;
+        t_file = file + itr.first;
+        t_rank = rank + itr.second;
+        if(t_file==dest_file && t_rank==dest_rank)
+        {
+            valid = true;
+            break;
+        }
+    }
+    
+    return 1;
+}
+
 void pawn_capture(Bitboards &board,int file,int rank, int capture_file)
 {
 	uint64_t bits;
