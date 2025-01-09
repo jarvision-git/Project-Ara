@@ -92,8 +92,6 @@ int piece_lookup(Bitboards &board,int file, int rank)
 void bishop(Bitboards &board,int file,int rank, int dest_file,int dest_rank)
 {
 	uint64_t piece = 0x8000000000000000 >> (((8 - rank)) * 8 + (file-1));
-    cout<<hex<<piece<<endl;
-
 	int delx=abs(dest_file - file);
 	int dely=abs(dest_rank - rank);
 	if(delx != dely)
@@ -271,7 +269,7 @@ void rook(Bitboards &board,int file,int rank,int dest_file, int dest_rank)
 					while(dely)
 					{
 						piece=piece<<8;
-						if((allbits*piece )!= 0)
+						if((allbits&piece)!= 0)
 						{
 							cout<<"Pieces present en route"<<endl;
 							return;
@@ -284,7 +282,7 @@ void rook(Bitboards &board,int file,int rank,int dest_file, int dest_rank)
 					while(dely)
 					{
 						piece=piece>>8;
-						if((allbits*piece )!= 0)
+						if((allbits&piece )!= 0)
 						{
 							cout<<"Pieces present en route"<<endl;
 							return;
@@ -301,7 +299,7 @@ void rook(Bitboards &board,int file,int rank,int dest_file, int dest_rank)
 					while(delx)
 					{
 						piece=piece>>1;
-						if((allbits*piece )!= 0)
+						if((allbits&piece)!= 0)
 						{
 							cout<<"Pieces present en route"<<endl;
 							return;
@@ -314,7 +312,7 @@ void rook(Bitboards &board,int file,int rank,int dest_file, int dest_rank)
 					while(delx)
 					{
 						piece=piece<<1;
-						if((allbits*piece )!= 0)
+						if((allbits&piece )!= 0)
 						{
 							cout<<"Pieces present en route"<<endl;
 							return;
@@ -325,7 +323,7 @@ void rook(Bitboards &board,int file,int rank,int dest_file, int dest_rank)
 				}
 
 			}
-
+            piece = 0x8000000000000000 >> (((8 - rank)) * 8 + (file-1));
 			if(piece_lookup(board,file,rank)==2)
 			{
 				if(piece_lookup(board,dest_file,dest_rank)<0)
@@ -704,6 +702,10 @@ int main() {
 // 	pawn_development(board,4,2,2);
 // 	print_board(board);
 	bishop(board,3,1,5,3);
+	print_board(board);
+	rook(board,1,1,1,7);
+	rook(board,1,7,1,8);
+	rook(board,1,8,1,1);
 	print_board(board);
 
 
