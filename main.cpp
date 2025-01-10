@@ -248,6 +248,12 @@ void bishop(Bitboards &board,int file,int rank, int dest_file,int dest_rank)
 	}
 }
 
+
+void queen(Bitboards &board,int file,int rank,int dest_file,int dest_rank)
+{
+    
+}
+
 void rook(Bitboards &board,int file,int rank,int dest_file, int dest_rank)
 {
 	int delx=abs(dest_file-file);
@@ -403,6 +409,95 @@ void rook(Bitboards &board,int file,int rank,int dest_file, int dest_rank)
 	}
 
 }
+
+
+void queen(Bitboards &board,int file,int rank,int dest_file,int dest_rank)
+{
+    int delx=abs(dest_file-file);
+    int dely=abs(dest_rank-rank);
+    uint64_t piece=0x8000000000000000 >> ((8-rank)*8 + file-1);
+    uint64_t capture,erase,allbits=board.white_king|board.white_queen|board.white_knights|board.white_bishops|board.white_pawns|board.white_rooks;
+    allbits=allbits|board.black_king|board.black_queen|board.black_knights|board.black_bishops|board.black_pawns|board.black_rooks;
+    if(delx!=0 || dely!=0 ||delx!=dely)
+    {
+        cout<<"invalid"<<endl;
+        return;
+    }
+    if(delx==0)
+    {
+        dely--;
+        if(dest_rank>rank)
+        {
+            while(dely)
+            {
+                piece=piece<<8;
+                if((allbits & piece)!=0)
+                {
+                    cout<<"Piece present en route"<<endl;
+                    return;
+                }
+                
+                dely--;
+            }
+        }
+        else
+        {
+            while(dely)
+            {
+                piece=piece>>8;
+                if((allbits & piece)!=0)
+                {
+                    cout<<"Piece present en route"<<endl;
+                    return;
+                }
+                
+                dely--;
+            }
+            
+        }
+        
+    }
+    else if (dely!=0)
+    {
+        delx--;
+        if(dest_file>file)
+        {
+            while(delx)
+            {
+                piece=piece>>1;
+                if((allbits & piece)!=0)
+                {
+                    cout<<"Piece present en route"<<endl;
+                    return;
+                }
+                
+                delx--;
+            }
+        }
+        else
+        {
+            while(delx)
+            {
+                piece=piece<<1;
+                if((allbits & piece)!=0)
+                {
+                    cout<<"Piece present en route"<<endl;
+                    return;
+                }
+                
+                delx--;
+            }
+            
+        }
+        
+    }
+    else
+    {
+        int steps = delx;
+        
+    }
+}
+
 void pawn_development(Bitboards &board,int file,int rank, int steps)
 {
 	uint64_t allbits=board.black_king | board.black_queen | board.black_rooks | board.black_bishops | board.black_knights | board.black_pawns|board.white_king | board.white_queen | board.white_rooks | board.white_bishops | board.white_knights | board.white_pawns;
