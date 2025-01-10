@@ -102,67 +102,32 @@ void bishop(Bitboards &board,int file,int rank, int dest_file,int dest_rank)
 	}
 	uint64_t allbits=board.white_pawns|board.white_rooks|board.white_bishops|board.white_knights|board.white_queen|board.white_king;
 	allbits=allbits | board.black_pawns|board.black_rooks|board.black_bishops|board.black_knights|board.black_queen|board.black_king;
-	if(dest_file>file)
+	int steps = delx;
+	int shift = 7;
+	bool ls=true;
+	if (dest_file<file && dest_rank>rank)
 	{
-		if(dest_rank>rank)
-		{
-			delx--;
-			while(delx)
-			{
-				piece = piece<<(7);
-				if((allbits & piece)!=0)
-				{
-					cout<<"pieces present en route"<<endl;
-					return;
-				}
-				delx--;
-			}
-		}
-		else
-		{
-			delx--;
-			while(delx)
-			{
-				piece = piece>>(9);
-				if((allbits & piece)!=0)
-				{
-					cout<<"pieces present en route"<<endl;
-					return;
-				}
-				delx--;
-			}
-		}
+		shift+=2;
 	}
-	else
+	else if (dest_file<file && dest_rank<rank)
 	{
-		if(dest_rank>rank)
+		shift+=2;
+		ls=false;
+	}
+	else if (dest_file>file && dest_rank<rank)
+	{
+		ls=false;
+	}
+	steps--;
+	while(steps)
+	{
+		piece = ls ? (piece<<shift):(piece>>shift);
+		if((piece&allbits)!=0)
 		{
-			delx--;
-			while(delx)
-			{
-				piece = piece<<(7);
-				if((allbits & piece)!=0)
-				{
-					cout<<"pieces present en route"<<endl;
-					return;
-				}
-				delx--;
-			}
+			cout<<"pieces en route"<<endl;
+			return;
 		}
-		else
-		{
-			delx--;
-			while(delx)
-			{
-				piece = piece>>(9);
-				if((allbits & piece)!=0)
-				{
-					cout<<"pieces present en route"<<endl;
-					return;
-				}
-				delx--;
-			}
-		}
+		steps--;
 	}
 	if(piece_lookup(board,file,rank)==4)
 	{
@@ -590,7 +555,7 @@ void queen(Bitboards &board,int file,int rank,int dest_file,int dest_rank)
 	}
 	else
 	{
-	    cout<<"No Queen Present"<<endl;
+		cout<<"No Queen Present"<<endl;
 	}
 }
 
@@ -974,7 +939,7 @@ void print_board(const Bitboards &board) {
 
 int main() {
 	Bitboards board = {
-		0x0000000000000000, // white pawns
+		0x000000000000FF00, // white pawns
 		0x0000000000000081, // white rooks
 		0x0000000000000042, // white knights
 		0x0000000000000024, // white bishops
@@ -990,15 +955,11 @@ int main() {
 
 
 	print_board(board);
-	queen(board,4,1,4,2);
-	print_board(board);
-	queen(board,4,2,4,7);
-	print_board(board);
-	queen(board,4,7,4,2);
-	print_board(board);
-	queen(board,4,2,5,3);
-	print_board(board);
-	queen(board,5,3,1,7);
+    pawn_development(board,2,2,2);
+    bishop(board,3,1,1,3);
+    pawn_development(board,2,4,1);
+    bishop(board,1,3,5,7);
+    bishop(board,5,7,6,6);
 	print_board(board);
 
 
