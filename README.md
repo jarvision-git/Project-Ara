@@ -47,16 +47,3 @@ The following are high-priority items for future development:
 *   **AI (Search Algorithm):** Implement a search algorithm (e.g., Minimax with Alpha-Beta Pruning) and evaluation function to enable the engine to play chess.
 *   **Perft Testing:** Implement a Perft function for robust testing of move generation.
 *   **Refined Error Handling:** More specific and robust error handling for invalid moves or board states.
-
-## Getting Started
-
-### Prerequisites
-
-*   A C++ compiler (e.g., g++).
-
-### Compiling
-
-Navigate to the project root directory and compile the source file:
-
-```bash
-g++ -std=c++17 -o chess_engine main.cpp # Replace main.cpp with your actual source file name if different
